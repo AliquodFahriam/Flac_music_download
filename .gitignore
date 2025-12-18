@@ -1,0 +1,7 @@
+songs/
+__pycache__/
+.venv/
+songs/
+data/
+.cache
+client_secrets.txt
