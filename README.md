@@ -1,8 +1,19 @@
-# FLAC Track Downloader 🎵
+# FLAC Track Downloader🎵
+
+**This is a fork of the original repo from [**dhaneshjayachandhiran**](https://github.com/dhaneshjayachandhiran). Mine is an adaptation of his work to make it compatible with new version of *squid.wtf*.** 
+
+
+
+
+
+
+
+
+
 
 A Python script that automatically downloads all songs from a Spotify playlist in high-quality FLAC format.
 
-This script automates downloads from the [**us.qobuz.squid.wtf**](https://us.qobuz.squid.wtf/) website. While you can visit the site to download single songs manually, this tool is designed to save you hours of work by automatically downloading entire Spotify playlists. It reads your playlist, finds each song on the website, and downloads it for you, making it perfect for bulk downloading.
+This script automates downloads from the [**tidal.squid.wtf**](https://tidal.squid.wtf/) website. While you can visit the site to download single songs manually, this tool is designed to save you hours of work by automatically downloading entire Spotify playlists. It reads your playlist, finds each song on the website, and downloads it for you, making it perfect for bulk downloading.
 
 ---
 ## Features ✨
@@ -28,7 +39,7 @@ Follow these steps carefully to get the script running on your own computer.
 
 ### Step 1: Download the Code
 
-* On the [**Flac_music_download** GitHub page](https://github.com/dhaneshjayachandhiran/Flac_music_download), click the green **`< > Code`** button.
+* On this page, click the green **`< > Code`** button.
 * Select **"Download ZIP"**.
 * Unzip the downloaded file. It will create a folder named `Flac_music_download-main`.
 
@@ -59,7 +70,7 @@ pip install -r requirements.txt
 ---
 ## 🚀 Configuration and Running the Script
 
-You need to edit the script to tell it where to save music and which playlist to use.
+You need to edit the *config.py* in order for the script to work for you. Full guide below 
 
 ### Step 1: Get Your Spotify API Keys
 
@@ -78,20 +89,12 @@ To allow the script to read your playlist, you need special "keys" from Spotify.
 Open the `Selenium_script.py` file in a text editor. You need to change the following lines at the top:
 
 ```python
-# Here u have to choose the download Directory
-# Example for Windows: "C:/Users/YourUser/Music/MyFlacSongs"
-# Example for Linux/Mac: "/home/your_user_name/Music/Flac_songs"
-DOWNLOAD_FOLDER = "/home/your_user_name/Music/Flac_songs"
-
-# Here past your Playlist link
-SPOTIFY_PLAYLIST_URL = "YOUR_SPOTIFY_PLAYLIST_URL_HERE"
-
-# --- Spotify Auth ---
-# Copy your keys from the Spotify Developer Dashboard here
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-    client_id='YOUR_CLIENT_ID_HERE',
-    client_secret='YOUR_CLIENT_SECRET_HERE'
-))
+DOWNLOAD_FOLDER = "FULL_PATH_TO_DOWNLOAD_FOLDER"
+SPOTIFY_PLAYLIST_URL = "PAST_YOUR_PLAYLIST_HERE"
+DOWNLOAD_TIMEOUT = 300
+ELEMENT_WAIT_TIMEOUT = 30
+CLIENT_ID='YOUR_CLIENT_ID_HERE',
+CLIENT_SECRET='YOUR_CLIENT_SECRET_HERE'
 ```
 
 * Update `DOWNLOAD_FOLDER` to the path where you want your music saved.
@@ -103,7 +106,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 Go back to your terminal (making sure you are still in the project folder) and run the script with this command:
 
 ```bash
-python Selenium_script.py
+python download.py
 ```
 
 The script will now start working. You'll see status updates directly in your terminal.
@@ -111,7 +114,7 @@ The script will now start working. You'll see status updates directly in your te
 ---
 ### Optional: Running in Headless Mode
 
-If you don't want the Chrome browser window to pop up, you can run the script invisibly. Open the `Selenium_script.py` file and find this line in the `setup_browser` function:
+If you don't want the Chrome browser window to pop up, you can run the script invisibly. Open the `downloadt.py` file and find this line in the `setup_browser` function:
 
 ```python
 # To run invisibly in the background, uncomment the next line

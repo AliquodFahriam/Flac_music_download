@@ -11,24 +11,17 @@ from selenium.webdriver.common.action_chains import ActionChains
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import re
+from common.config import *
 
-# Configuration
-# Here u have to choose the download Directory
-DOWNLOAD_FOLDER = "/home/dhanesh/Music/Flac_songs"
 CSV_LOG = "data/download_log.csv"
-
-# Here past your Playlist link
-SPOTIFY_PLAYLIST_URL = "PAST_YOUR_PLAYLIST_HERE"
-DOWNLOAD_TIMEOUT = 300
-ELEMENT_WAIT_TIMEOUT = 30
 
 # Spotify Auth
 '''Here change the client_id and client_secret with your spotify account 
 your can get the client_id,key on here "https://developer.spotify.com/dashboard" '''
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-    client_id='YOUR_CLIENT_ID_HERE',
-    client_secret='YOUR_CLIENT_SECRET_HERE'
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET
 ))
 
 
@@ -93,7 +86,7 @@ def wait_for_download_completion_with_name(directory, timeout, expected_title):
                         pass
                     return False
 
-        time.sleep(1)
+        time.sleep(2)
 
     return False
 
@@ -149,7 +142,7 @@ def setup_browser():
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--headless")  # Remove or comment this line if you want to see the browser window
+    #options.add_argument("--headless")  # Remove or comment this line if you want to see the browser window
     prefs = {
         "download.default_directory": DOWNLOAD_FOLDER,
         "download.prompt_for_download": False,
@@ -170,51 +163,33 @@ def download_song(driver, title, artist):
     """Download a single song with improved reliability"""
     search_query = f"{title} {artist}"
     try:
-        driver.get("https://us.qobuz.squid.wtf/")
+        driver.get("https://tidal.squid.wtf/")
         wait = WebDriverWait(driver, ELEMENT_WAIT_TIMEOUT)
         time.sleep(1)
 
         # Set filter to Tracks
         filter_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[contains(., 'Albums') or contains(., 'albums')]")
+            (By.XPATH, "//button[contains(., 'Tracks') or contains(., 'tracks')]")
         ))
         filter_button.click()
-        time.sleep(0.05)
-
-        tracks_option = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//div[contains(@role, 'menuitemradio') and contains(., 'Tracks')]")
-        ))
-        tracks_option.click()
-        time.sleep(0.5)
+        time.sleep(1)
 
         # Perform search
         search_box = wait.until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, "input[placeholder*='Search']")
+            (By.CSS_SELECTOR, "input[placeholder*='Search for tracks, albums, artists... or paste a URL']")
         ))
         search_box.clear()
         search_box.send_keys(search_query[:100])  # Limit to 100 chars
         search_box.send_keys(Keys.RETURN)
-        time.sleep(0.5)
+        time.sleep(4)
 
-        # Check if search results are found
+        
         try:
-            track_card = wait.until(EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div.group")
-            ))
-        except:
+            download_button = wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[contains(@aria-label, 'Download')])[1]")))
+            time.sleep(3)
+            download_button.click()
+        except Exception:
             return "Failed (Song not found)"
-
-        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", track_card)
-        time.sleep(1)
-
-        ActionChains(driver).move_to_element(track_card).perform()
-        time.sleep(0.7)
-
-        download_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[.//*[contains(@class, 'lucide-download')]]")
-        ))
-        download_button.click()
-        time.sleep(0.5)
 
         # Verify download
         if wait_for_download_completion_with_name(DOWNLOAD_FOLDER, DOWNLOAD_TIMEOUT, title):
@@ -287,9 +262,12 @@ def main():
         print(f"\nFatal error: {e}")
     finally:
         if driver:
-            driver.quit()
+            try:
+                driver.quit()
+            except Exception:
+                pass
+            driver = None   # 👈 prevents __del__ from running
             print("Browser closed")
-
 
 if __name__ == "__main__":
     main()
