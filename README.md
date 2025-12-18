@@ -1,16 +1,23 @@
-# FLAC Track Downloader🎵
+# FLAC Track Downloader from AliquodFahriam
 
 **This is a fork of the original repo from [**dhaneshjayachandhiran**](https://github.com/dhaneshjayachandhiran). Mine is an adaptation of his work to make it compatible with new version of *squid.wtf*.** 
 
+## Disclaimer
+
+This project is provided for **educational and research purposes only**.
+
+The author does **not host, store, or distribute any copyrighted content**, and does **not encourage or condone piracy or illegal downloads**.
+
+Any use of this software to download or access copyrighted material is done **entirely at the user's own risk**.  
+The author **assumes no responsibility or liability** for how this tool is used, including any legal consequences that may arise from its use.
+
+By using this software, you agree that you are solely responsible for complying with all applicable laws in your country.
 
 
 
+---
 
-
-
-
-
-
+## FLAC Track Downloader🎵
 A Python script that automatically downloads all songs from a Spotify playlist in high-quality FLAC format.
 
 This script automates downloads from the [**tidal.squid.wtf**](https://tidal.squid.wtf/) website. While you can visit the site to download single songs manually, this tool is designed to save you hours of work by automatically downloading entire Spotify playlists. It reads your playlist, finds each song on the website, and downloads it for you, making it perfect for bulk downloading.
@@ -86,7 +93,7 @@ To allow the script to read your playlist, you need special "keys" from Spotify.
 > **💡 Don't have a Spotify playlist?**
 > You can easily transfer your playlist from other services like Apple Music or YouTube Music to Spotify using the free [**Tune My Music**](https://www.tunemymusic.com/transfer) website. Once transferred, you can get the Spotify playlist link to use below.
 
-Open the `Selenium_script.py` file in a text editor. You need to change the following lines at the top:
+Open the `common/config.py` file in a text editor. You need to change the following lines:
 
 ```python
 DOWNLOAD_FOLDER = "FULL_PATH_TO_DOWNLOAD_FOLDER"
